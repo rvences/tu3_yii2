@@ -7,7 +7,7 @@ use yii\base\NotSupportedException;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\web\IdentityInterface;
-//use yii\helpers\Security;
+
 /**
  * User model
  *
@@ -207,4 +207,4 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
-} 
+}
