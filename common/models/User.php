@@ -7,6 +7,7 @@ use yii\base\NotSupportedException;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\web\IdentityInterface;
+use backend\models\Rol;
 
 /**
  * User model
@@ -207,4 +208,36 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
+
+    /* CLASE NO DEFINIDA ACTUALMENTE
+    public function getPerfil()
+    {
+        return $this->hasOne(Perfil::className(), ['user_id' => 'id']);
+    }*/
+
+    /**
+     * relación get rol
+     *
+     */
+    public function getRol()
+    {
+        return $this->hasOne(Rol::className(), ['id' => 'rol_id']);
+    }
+    /**
+     * get rol nombre
+     *
+     */
+    public function getRolNombre()
+    {
+        return $this->rol ? $this->rol->rol_nombre : '- sin rol -';
+    }
+    /**
+     * get lista de roles para lista desplegable
+     */
+    /* No funciona todavía
+    public static function getRolLista()
+    {
+        $dropciones = Rol::find()->asArray()->all();
+        return ArrayHelper::map($dropciones, 'id', 'rol_nombre');
+    }*/
 }
