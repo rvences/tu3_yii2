@@ -7,7 +7,9 @@ use yii\base\NotSupportedException;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\web\IdentityInterface;
+use backend\models\Estado;
 use backend\models\Rol;
+use yii\helpers\ArrayHelper;
 
 /**
  * User model
@@ -58,7 +60,11 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             ['estado_id', 'default', 'value' => self::ESTADO_ACTIVO],
+            [['estado_id'],'in', 'range'=>array_keys($this->getEstadoLista())],
+
             ['rol_id', 'default', 'value' => 1],
+            [['rol_id'],'in', 'range'=>array_keys($this->getRolLista())],
+
             ['tipo_usuario_id', 'default', 'value' => 1],
             ['username', 'filter', 'filter' => 'trim'],
             ['username', 'required'],
@@ -234,10 +240,34 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * get lista de roles para lista desplegable
      */
-    /* No funciona todavía
     public static function getRolLista()
     {
         $dropciones = Rol::find()->asArray()->all();
         return ArrayHelper::map($dropciones, 'id', 'rol_nombre');
-    }*/
+    }
+
+    /**
+     * relación get estado
+     *
+     */
+    public function getEstado()
+    {
+        return $this->hasOne(Estado::className(), ['id' => 'estado_id']);
+    }
+    /**
+     * * get estado nombre
+     *
+     */
+    public function getEstadoNombre()
+    {
+        return $this->estado ? $this->estado->estado_nombre : '- sin estado -';
+    }
+    /**
+     * get lista de estados para lista desplegable
+     */
+    public static function getEstadoLista()
+    {
+        $dropciones = Estado::find()->asArray()->all();
+        return ArrayHelper::map($dropciones, 'id', 'estado_nombre');
+    }
 }
