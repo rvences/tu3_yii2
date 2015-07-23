@@ -9,7 +9,10 @@ use yii\db\Expression;
 use yii\web\IdentityInterface;
 use backend\models\Estado;
 use backend\models\Rol;
+//use frontend\models\Perfil;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
+use yii\helpers\Html;
 
 /**
  * User model
@@ -78,12 +81,20 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /* Las etiquetas de los atributos de su modelo */
-    public function attributeLabels()
-    {
+    /* Las etiquetas de los atributos de su modelo */
+    public function attributeLabels() {
         return [
             /* Sus otras etiquetas de atributo */
-        ];
-    }
+            'rolNombre' => Yii::t('app', 'Rol'),
+            'estadoNombre' => Yii::t('app', 'Estado'),
+            'perfilId' => Yii::t('app', 'Perfil'),
+            'perfilLink' => Yii::t('app', 'Perfil'),
+            'userLink' => Yii::t('app', 'User'),
+            'username' => Yii::t('app', 'User'),
+            'tipoUsuarioNombre' => Yii::t('app', 'Tipo Usuario'),
+            'tipoUsuarioId' => Yii::t('app', 'Tipo Usuario'),
+            'userIdLink' => Yii::t('app', 'ID'),
+        ]; }
 
     /**
      * @findIdentity
@@ -270,4 +281,43 @@ class User extends ActiveRecord implements IdentityInterface
         $dropciones = Estado::find()->asArray()->all();
         return ArrayHelper::map($dropciones, 'id', 'estado_nombre');
     }
+
+    /**
+     * @getPerfilId
+     *
+     */
+    public function getPerfilId()
+    {
+        return $this->perfil ? $this->perfil->id : 'ninguno';
+    }
+
+    public function getPerfilLink()
+    {
+        $url = Url::to(['perfil/view', 'id'=>$this->perfilId]);
+        $opciones = [];
+        return Html::a($this->perfil ? 'perfil' : 'ninguno', $url, $opciones);
+    }
+
+    /**
+     * get user id Link
+     *
+     */
+    public function getUserIdLink()
+    {
+        $url = Url::to(['user/update', 'id'=>$this->id]);
+        $opciones = [];
+        return Html::a($this->id, $url, $opciones);
+    }
+    /**
+     * @getUserLink
+     *
+     */
+
+    public function getUserLink()
+    {
+        $url = Url::to(['user/view', 'id'=>$this->id]);
+        $opciones = [];
+        return Html::a($this->username, $url, $opciones);
+    }
+
 }
