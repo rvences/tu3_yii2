@@ -5,6 +5,11 @@ use yii;
 
 class RegistrosHelpers
 {
+    /**
+     * Verifica si el usuario cuando con algún registro dentro del modelo
+     * @param $modelo_nombre
+     * @return bool
+     */
     public static function userTiene($modelo_nombre)
     {
         $conexion = \Yii::$app->db;
