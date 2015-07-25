@@ -3,16 +3,20 @@ namespace common\models;
 
 use Yii;
 use yii\base\NotSupportedException;
-//use yii\behaviors\TimestampBehavior;
+
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\web\IdentityInterface;
-use backend\models\Estado;
+//use yii\base\Security;  // use yii\helpers\Security;
 use backend\models\Rol;
-//use frontend\models\Perfil;
+use backend\models\Estado;
+use frontend\models\Perfil;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\helpers\Html;
+/*
+use yii\behaviors\TimestampBehavior;
+*/
 
 /**
  * User model
@@ -25,7 +29,6 @@ use yii\helpers\Html;
  * @property string $auth_key
  * @property integer $rol_id
  * @property integer $estado_id
- * @property integer $tipo_usuario_id
  * @property integer $created_at
  * @property integer $updated_at
  * @property string $password write-only password
@@ -36,7 +39,7 @@ class User extends ActiveRecord implements IdentityInterface
 
     public static function tableName()
     {
-        return 'user';
+        return '{{%user}}';
     }
 
     /**
@@ -65,14 +68,14 @@ class User extends ActiveRecord implements IdentityInterface
             ['estado_id', 'default', 'value' => self::ESTADO_ACTIVO],
             [['estado_id'],'in', 'range'=>array_keys($this->getEstadoLista())],
 
-            ['rol_id', 'default', 'value' => 1],
+            ['rol_id', 'default', 'value' => 10],
             [['rol_id'],'in', 'range'=>array_keys($this->getRolLista())],
 
-            ['tipo_usuario_id', 'default', 'value' => 1],
             ['username', 'filter', 'filter' => 'trim'],
             ['username', 'required'],
             ['username', 'unique'],
             ['username', 'string', 'min' => 2, 'max' => 255],
+
             ['email', 'filter', 'filter' => 'trim'],
             ['email', 'required'],
             ['email', 'email'],
@@ -81,19 +84,16 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /* Las etiquetas de los atributos de su modelo */
-    /* Las etiquetas de los atributos de su modelo */
     public function attributeLabels() {
         return [
-            /* Sus otras etiquetas de atributo */
+            /* Sus otras etiquetas de atributo
             'rolNombre' => Yii::t('app', 'Rol'),
             'estadoNombre' => Yii::t('app', 'Estado'),
             'perfilId' => Yii::t('app', 'Perfil'),
             'perfilLink' => Yii::t('app', 'Perfil'),
             'userLink' => Yii::t('app', 'User'),
             'username' => Yii::t('app', 'User'),
-            'tipoUsuarioNombre' => Yii::t('app', 'Tipo Usuario'),
-            'tipoUsuarioId' => Yii::t('app', 'Tipo Usuario'),
-            'userIdLink' => Yii::t('app', 'ID'),
+            'userIdLink' => Yii::t('app', 'ID'),*/
         ]; }
 
     /**
@@ -114,7 +114,7 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Encuentra usuario por username
-     * dividida en dos líneas para evitar ajuste de línea * @param string $username
+     * @param string $username
      * @return static|null
      */
     public static function findByUsername($username)
@@ -123,9 +123,9 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Encuentra usuario por clave de restablecimiento de password
+     * Encuentra usuario por password_reset_token
      *
-     * @param string $token clave de restablecimiento de password
+     * @param string $token llave para recuperar la clave
      * @return static|null
      */
     public static function findByPasswordResetToken($token)
@@ -140,7 +140,7 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Determina si la clave de restablecimiento de password es válida
+     * Determina si la llave de recuperación de password es válida
      *
      * @param string $token clave de restablecimiento de password
      * @return boolean
@@ -226,30 +226,31 @@ class User extends ActiveRecord implements IdentityInterface
         $this->password_reset_token = null;
     }
 
-    /* CLASE NO DEFINIDA ACTUALMENTE
-    public function getPerfil()
-    {
-        return $this->hasOne(Perfil::className(), ['user_id' => 'id']);
-    }*/
+
+    // HASTA AQUI ES LO QUE SE GENERA AUTOMATICAMENTE
 
     /**
-     * relación get rol
-     *
+     * Obtiene de la tabla Rol el campo id que hace referencia a User(rol_id)
+     * Es decir Rol(id) mapea a User(rol_id)
+     * @return \yii\db\ActiveQuery
      */
     public function getRol()
     {
         return $this->hasOne(Rol::className(), ['id' => 'rol_id']);
     }
+
     /**
-     * get rol nombre
-     *
+     * Devuelde el nombre del Rol ex. "Administrador" o el texto "Sin Rol
+     * @return string
      */
     public function getRolNombre()
     {
-        return $this->rol ? $this->rol->rol_nombre : '- sin rol -';
+        return $this->rol ? $this->rol->rol_nombre : '- Sin Rol -';
     }
+
     /**
-     * get lista de roles para lista desplegable
+     * Devuelve un arreglo con todos los posibles roles ex 1 Administrador
+     * @return array
      */
     public static function getRolLista()
     {
@@ -258,23 +259,27 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * relación get estado
-     *
+     * Obtiene de la tabla Estado el campo ID que hace referencia a User(estado_id)
+     * Es decir Estado(id) mapea a User(estado_id)
+     * @return \yii\db\ActiveQuery
      */
     public function getEstado()
     {
         return $this->hasOne(Estado::className(), ['id' => 'estado_id']);
     }
+
     /**
-     * * get estado nombre
-     *
+     * Devuelve el nombre del Estado ex. "Activo"
+     * @return string
      */
     public function getEstadoNombre()
     {
-        return $this->estado ? $this->estado->estado_nombre : '- sin estado -';
+        return $this->estado ? $this->estado->estado_nombre : '- Sin Estado -';
     }
+
     /**
-     * get lista de estados para lista desplegable
+     * Devuelve un arreglo con todos los posibles Estados ex. 1 Activo
+     * @return array
      */
     public static function getEstadoLista()
     {
@@ -282,6 +287,14 @@ class User extends ActiveRecord implements IdentityInterface
         return ArrayHelper::map($dropciones, 'id', 'estado_nombre');
     }
 
+    /**
+     * Obtiene de la tabla Perfil el campo USER_ID que hace referencia a User(id)
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPerfil()
+    {
+        return $this->hasOne(Perfil::className(), ['user_id' => 'id']);
+    }
     /**
      * @getPerfilId
      *
@@ -319,5 +332,4 @@ class User extends ActiveRecord implements IdentityInterface
         $opciones = [];
         return Html::a($this->username, $url, $opciones);
     }
-
 }

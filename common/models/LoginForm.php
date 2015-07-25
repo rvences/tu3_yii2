@@ -3,6 +3,7 @@ namespace common\models;
 
 use Yii;
 use yii\base\Model;
+use yii\web\NotFoundHttpException;
 
 /**
  * Login form
@@ -61,6 +62,21 @@ class LoginForm extends Model
             return false;
         }
     }
+
+    /**
+     * Solo permite que accedan al backend usuarios con el Rol mínimo de "Administrador"
+     * @throws NotFoundHttpException
+     */
+    public function loginAdmin()
+    {
+        if (($this->validate()) && PermisosHelpers::requerirMinimoRol('Administrador', $this->getUser()->id)) {
+            // Si llega aquí el usuario y la clave son correctas
+            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
+        } else {
+            throw new NotFoundHttpException( 'No existe en la BD.');
+        }
+    }
+
 
     /**
      * Finds user by [[username]]
