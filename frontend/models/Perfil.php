@@ -33,10 +33,6 @@ class Perfil extends \yii\db\ActiveRecord
         //return 'perfil';
     }
 
-
-
-
-
     /**
      * behaviors
      */
@@ -111,9 +107,9 @@ class Perfil extends \yii\db\ActiveRecord
     }
 
     /**
-     * @getUserLink
+     * Crea un enlace a la vista del usuario
+     * @return string
      */
-
     public function getUserLink()
     {
         $url = Url::to(['user/view', 'id'=>$this->UserId]);

@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             //'id',
             ['attribute'=>'perfilIdLink', 'format'=>'raw'],
-            ['attribute'=>'userLink', 'format'=>'raw'],
+            //['attribute'=>'userLink', 'format'=>'raw'],
             'nombre',
             'apellido',
             'fecha_nacimiento',

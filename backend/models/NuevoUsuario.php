@@ -1,5 +1,5 @@
 <?php
-namespace frontend\models;
+namespace backend\models;
 
 use common\models\User;
 use yii\base\Model;
@@ -8,7 +8,7 @@ use Yii;
 /**
  * Signup form
  */
-class SignupForm extends Model
+class NuevoUsuario extends Model
 {
     public $username;
     public $email;

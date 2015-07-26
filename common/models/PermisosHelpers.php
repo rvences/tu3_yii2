@@ -15,6 +15,13 @@ class PermisosHelpers
     {
         return ValorHelpers::rolCoincide($rol_nombre);
     }
+
+    /**
+     * Verifica que el usuario registrado cuente con los privilegios mínimos para acceder
+     * @param $rol_nombre
+     * @param null $userId
+     * @return bool
+     */
     public static function requerirMinimoRol($rol_nombre, $userId=null)
     {
         if (ValorHelpers::esRolNombreValido($rol_nombre)){

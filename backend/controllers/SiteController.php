@@ -6,6 +6,8 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use common\models\LoginForm;
 use yii\filters\VerbFilter;
+use common\models\PermisosHelpers;
+use backend\models\NuevoUsuario;
 
 /**
  * Site controller
@@ -18,24 +20,38 @@ class SiteController extends Controller
     public function behaviors()
     {
         return [
+
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => \yii\filters\AccessControl::className(),
+                'only' => ['index', 'view','create', 'update', 'delete'],
                 'rules' => [
                     [
-                        'actions' => ['login', 'error'],
-                        'allow' => true,
-                    ],
-                    [
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['index', 'create', 'view',],
                         'allow' => true,
                         'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            return PermisosHelpers::requerirMinimoRol('Administrador')
+                            && PermisosHelpers::requerirEstado('Activo');
+                        }
                     ],
+                    [
+                        'actions' => [ 'update', 'delete'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            return PermisosHelpers::requerirMinimoRol('Super Administrador')
+                            && PermisosHelpers::requerirEstado('Activo');
+                        }
+                    ],
+
                 ],
+
             ],
+
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'logout' => ['post'],
+                    'delete' => ['post'],
                 ],
             ],
         ];
@@ -80,4 +96,5 @@ class SiteController extends Controller
 
         return $this->goHome();
     }
+
 }

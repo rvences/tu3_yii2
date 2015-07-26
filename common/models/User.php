@@ -7,7 +7,7 @@ use yii\base\NotSupportedException;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\web\IdentityInterface;
-//use yii\base\Security;  // use yii\helpers\Security;
+use yii\base\Security;  // use yii\helpers\Security;
 use backend\models\Rol;
 use backend\models\Estado;
 use frontend\models\Perfil;
@@ -35,7 +35,8 @@ use yii\behaviors\TimestampBehavior;
  */
 class User extends ActiveRecord implements IdentityInterface
 {
-    const ESTADO_ACTIVO = 1;
+    const ESTADO_ACTIVO = 1; // estado(id)
+    const ROL_VENDEDOR = 1; // rol(id)
 
     public static function tableName()
     {
@@ -66,9 +67,9 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             ['estado_id', 'default', 'value' => self::ESTADO_ACTIVO],
-            [['estado_id'],'in', 'range'=>array_keys($this->getEstadoLista())],
+            //[['estado_id'],'in', 'range'=>array_keys($this->getEstadoLista())],
 
-            ['rol_id', 'default', 'value' => 10],
+            ['rol_id', 'default', 'value' => self::ROL_VENDEDOR],
             [['rol_id'],'in', 'range'=>array_keys($this->getRolLista())],
 
             ['username', 'filter', 'filter' => 'trim'],
@@ -322,10 +323,9 @@ class User extends ActiveRecord implements IdentityInterface
         return Html::a($this->id, $url, $opciones);
     }
     /**
+     * Devuelve el enlace a la pagina de visualizacion del usuario
      * @getUserLink
-     *
      */
-
     public function getUserLink()
     {
         $url = Url::to(['user/view', 'id'=>$this->id]);

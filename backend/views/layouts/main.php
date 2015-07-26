@@ -5,10 +5,14 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 
+use common\models\PermisosHelpers;
+use backend\assets\FontAwesomeAsset;
+
 /* @var $this \yii\web\View */
 /* @var $content string */
 
 AppAsset::register($this);
+FontAwesomeAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -24,21 +28,61 @@ AppAsset::register($this);
     <?php $this->beginBody() ?>
     <div class="wrap">
         <?php
+        if (!Yii::$app->user->isGuest){
+
+            $is_admin = PermisosHelpers::requerirMinimoRol('Administrador');
+
             NavBar::begin([
-                'brandLabel' => 'My Company',
+
+                'brandLabel' => 'TeleUrban <i class="fa fa-plug"></i> Administración',
+                'brandUrl' => Yii::$app->homeUrl,
+                'options' => [
+                    'class' => 'navbar-inverse navbar-fixed-top',
+                ],
+            ]);
+
+        } else {
+
+            NavBar::begin([
+
+                'brandLabel' => 'Yii 2 Build <i class="fa fa-plug"></i>',
                 'brandUrl' => Yii::$app->homeUrl,
                 'options' => [
                     'class' => 'navbar-inverse navbar-fixed-top',
                 ],
             ]);
             $menuItems = [
-                ['label' => 'Home', 'url' => ['/site/index']],
+                ['label' => 'Inicio', 'url' => ['/site/index']],
             ];
+        }
+
+        if (!Yii::$app->user->isGuest && $is_admin) {
+            $menuItems[] = ['label' => 'Usuarios', 'url' => ['user/index']];
+            $menuItems[] = ['label' => 'Perfiles', 'url' => ['perfil/index']];
+            $menuItems[] = ['label' => 'Roles', 'url' => ['rol/index']];
+            $menuItems[] = ['label' => 'Estado', 'url' => ['estado/index']];
+        }
+
+
+
+
+
+
+
+            /*
+            NavBar::begin([
+                'brandLabel' => 'My Company',
+                'brandUrl' => Yii::$app->homeUrl,
+                'options' => [
+                    'class' => 'navbar-inverse navbar-fixed-top',
+                ],
+            ]);*/
+
             if (Yii::$app->user->isGuest) {
-                $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
+                $menuItems[] = ['label' => 'Acceder', 'url' => ['/site/login']];
             } else {
                 $menuItems[] = [
-                    'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
+                    'label' => 'Salir (' . Yii::$app->user->identity->username . ')',
                     'url' => ['/site/logout'],
                     'linkOptions' => ['data-method' => 'post']
                 ];

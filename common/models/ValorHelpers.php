@@ -30,9 +30,7 @@ class ValorHelpers
     public static function getUsersRolValor($userId=null)
     {
         if ($userId == null){
-            // Esto creo que no funciona
-            echo "Error Valr Helper 34" ;
-            exit;
+            // Obteniendo el valor del rol del usuario logueado
             $usersRolValor = Yii::$app->user->identity->rol->rol_valor;
             return isset($usersRolValor) ? $usersRolValor : false;
         } else {
@@ -41,14 +39,27 @@ class ValorHelpers
             return isset($usersRolValor) ? $usersRolValor : false;
         }
     }
+
+    /**
+     * Obtiene el rol_id de acuerdo al nombre del rol
+     * @param $rol_nombre
+     * @return bool|mixed
+     */
     public static function getRolValor($rol_nombre)
     {
 
         $rol = Rol::find('rol_valor')
             ->where(['rol_nombre' => $rol_nombre])
             ->one();
+        //print_r($rol);exit;
         return isset($rol->rol_valor) ? $rol->rol_valor : false;
     }
+
+    /**
+     * Verifica que el Rol exista en la BD y devuelve true si existe.
+     * @param $rol_nombre
+     * @return bool
+     */
     public static function esRolNombreValido($rol_nombre)
     {
         $rol = Rol::find('rol_nombre')
@@ -56,6 +67,7 @@ class ValorHelpers
             ->one();
         return isset($rol->rol_nombre) ? true : false;
     }
+
     public static function estadoCoincide($estado_nombre)
     {
         $userTieneEstadoName = Yii::$app->user->identity->estado->estado_nombre;
