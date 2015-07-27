@@ -4,13 +4,13 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model frontend\models\Perfil */
+/* @var $model frontend\models\Inversiones */
 
-$this->title = 'Cambiar datos de usuario';
-$this->params['breadcrumbs'][] = ['label' => 'Perfil', 'url' => ['index']];
+$this->title = 'Create Inversiones';
+$this->params['breadcrumbs'][] = ['label' => 'Inversiones', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="perfil-create">
+<div class="inversiones-create">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
