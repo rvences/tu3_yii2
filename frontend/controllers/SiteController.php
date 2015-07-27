@@ -68,6 +68,8 @@ class SiteController extends Controller
     public function actionIndex()
     {
         return $this->render('index');
+        //return $this->redirect('login');
+        //$this->redirect(\Yii::$app->urlManager->createUrl("site/login"));
     }
 
     public function actionLogin()
@@ -93,6 +95,7 @@ class SiteController extends Controller
         return $this->goHome();
     }
 
+    /*
     public function actionContact()
     {
         $model = new ContactForm();
@@ -109,13 +112,14 @@ class SiteController extends Controller
                 'model' => $model,
             ]);
         }
-    }
+    }*/
 
     public function actionAbout()
     {
         return $this->render('about');
     }
 
+    /*
     public function actionSignup()
     {
         $model = new SignupForm();
@@ -131,6 +135,7 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
+    */
 
     public function actionRequestPasswordReset()
     {

@@ -18,10 +18,10 @@ $this->title = $name;
     </div>
 
     <p>
-        The above error occurred while the Web server was processing your request.
+        Trato de acceder un espacio inexistente.
     </p>
     <p>
-        Please contact us if you think this is a server error. Thank you.
+        En caso de que considere que es un error en el servidor, contacta a <a href="http://nibira.com">Nibira</a> .
     </p>
 
 </div>
