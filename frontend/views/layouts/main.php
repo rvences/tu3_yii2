@@ -45,7 +45,7 @@ FontAwesomeAsset::register($this);
                 //$menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
                 $menuItems[] = ['label' => 'Acceder', 'url' => ['/site/login']];
             } else {
-                $menuItems[] = ['label' => 'Perfil', 'url' => ['/perfil/view']];
+                $menuItems[] = ['label' => 'Iniciativa Privada', 'url' => ['/personas']];
                 $menuItems[] = [
                     'label' => 'Salir (' . Yii::$app->user->identity->username . ')',
                     'url' => ['/site/logout'],
